@@ -17,14 +17,9 @@ public class BoardManager : MonoBehaviour {
 
     private void Start()
     {
-       SpawnMap();
-    }
-
-    private void Update()
-    {
         DrawMap();
+        SpawnMap();
     }
-
 
     //Spawn map will create a grid of tiles, the size determined by MAP_SIZE, in the future this function needs to
     //take parameters to dictate the kind of map that will be created
@@ -65,18 +60,5 @@ public class BoardManager : MonoBehaviour {
     //This function currently draws debug lines to display a grid on the playing surface,
     //it will need conversion into an ingame render of lines, or some addition to tile textures ect.
     private void DrawMap()
-    {
-        Vector3 x_line = Vector3.right * MAP_SIZE;
-        Vector3 y_line = Vector3.forward * MAP_SIZE;
-        for (int i = 0; i <= MAP_SIZE; i++)
-        {
-            Vector3 start = Vector3.forward * i;
-            Debug.DrawLine(start, start + x_line);
-            for (int j = 0; j <= MAP_SIZE; j++)
-            {
-                start = Vector3.right * j;
-                Debug.DrawLine(start, start + y_line);
-            }
-        }
-    }
+    {}
 }

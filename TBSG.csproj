@@ -318,6 +318,7 @@
     <Compile Include="Assets\Scripts\BoardManager.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\GridMesh.cs" />
     <Compile Include="Assets\Scripts\MoveNode.cs" />
     <Compile Include="Assets\Scripts\SearchNode.cs" />
     <Compile Include="Assets\Scripts\Tiles\Tile.cs" />
