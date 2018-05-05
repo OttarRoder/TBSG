@@ -41,28 +41,28 @@ public class Board_Highlights : MonoBehaviour
 
     //Passed a grid of values, will display highlights on the map with the correspondance of
     //0 = none, 1 = white, 2 = red, 5 = green
-    public void HighLightAllowedMoves(int[,] moves)
+    public void HighLightAllowedMoves(MoveNode[,] moves)
     {
         for(int i = 0; i < MAP_SIZE; i++)
         {
             for(int j = 0; j < MAP_SIZE; j++)
             {
-                if(moves [i , j] != 0)
+                if(moves [i , j].code != 0)
                 {
                     GameObject go = GetHighlightObject();
                     go.SetActive(true);
                     go.transform.position = new Vector3(i + TILE_OFFSET, 0, j + TILE_OFFSET);
 
                     rend = go.GetComponent<Renderer>();
-                    if (moves[i, j] == 1)
+                    if (moves[i, j].code == 1)
                     {
                         rend.sharedMaterial = def_mat;
                     }
-                    else if (moves[i, j] == 2)
+                    else if (moves[i, j].code == 2)
                     {
                         rend.sharedMaterial = ene_mat;
                     }
-                    else if (moves[i, j] == 5)
+                    else if (moves[i, j].code == 5)
                     {
                         rend.sharedMaterial = sef_mat;
                     }

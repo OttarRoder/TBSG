@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class UnitManager : MonoBehaviour
@@ -18,7 +19,7 @@ public class UnitManager : MonoBehaviour
     private List<GameObject> activeUnits;
     public Unit[,] units { set; get; }
 
-    private int[,] allowedMoves { set; get; }
+    private MoveNode[,] allowedMoves { set; get; }
 
     private Unit selectedUnit;
 
@@ -101,10 +102,9 @@ public class UnitManager : MonoBehaviour
 
         else if (units[x, y].Team != GameManager.Instance.playerTurn)
             return;
-
-        allowedMoves = units[x, y].PossibleMove();
         DeselectUnit();
         selectedUnit = units[x, y];
+        allowedMoves = PossibleMove();
         Board_Highlights.Instance.HighLightAllowedMoves(allowedMoves);
     }
 
@@ -116,13 +116,21 @@ public class UnitManager : MonoBehaviour
 
     private void MoveUnit(int x, int y)
     {
-        if (allowedMoves[x, y] == 1)
+        MoveNode node = allowedMoves[x, y];
+        Stack<MoveNode> stack = new Stack<MoveNode>();
+        while(node.code != 5)
+        {
+            stack.Push(node);
+            node = node.previous;
+        }
+
+        if (allowedMoves[x, y].code == 1)
         {
             units[selectedUnit.currentX, selectedUnit.currentY] = null;
             selectedUnit.transform.position = GetTileCenter(x, y);
             selectedUnit.SetPosition(x, y);
             units[x, y] = selectedUnit;
-            units[x, y].moveRem = 0;
+            units[x, y].moveRem -= allowedMoves[x, y].dist;
         }
         DeselectUnit();
     }
@@ -163,6 +171,100 @@ public class UnitManager : MonoBehaviour
             selectedX = -1;
             selectedY = -1;
         }
+    }
+
+    private MoveNode[,] PossibleMove()
+    {
+        Unit c;
+        int code;
+        int x;
+        int y;
+        int dist = 0;
+        int i = 0;
+
+        MoveNode[,] r = new MoveNode[MAP_SIZE, MAP_SIZE];
+        for(int j = 0; j < MAP_SIZE; j++)
+        {
+            for(int k = 0; k < MAP_SIZE; k++)
+            {
+                r[j, k] = new MoveNode();
+            }
+        }
+
+        SearchNode start = new SearchNode(selectedX, selectedY, 0);
+        List<SearchNode> Open_List = new List<SearchNode>();
+        List<SearchNode> Closed_List = new List<SearchNode>();
+        Open_List.Add(start);
+
+        while (Open_List.Any() && i < 10000)
+        {
+            i++;
+            x = Open_List[0].x;
+            y = Open_List[0].y;
+            dist = Open_List[0].dist;
+
+            c = units[x, y];
+
+            code = 0;
+            if (c == null)
+            {
+                code = 1;
+            }
+            else if (c.Team != selectedUnit.Team)
+            {
+                code = 2;
+            }
+            else if (selectedX == x && selectedY == y)
+            {
+                code = 5;
+            }
+            r[x, y].code = code;
+            r[x, y].dist = dist;
+
+            if ((code == 1 || code == 5) && dist < selectedUnit.moveRem)
+            {
+                if (x + 1 < MAP_SIZE)
+                {
+                    start = new SearchNode(x + 1, y, dist + 1);
+                    if (!(Closed_List.Contains(start)) && !(Open_List.Contains(start)))
+                    {
+                        Open_List.Add(start);
+                        r[x + 1, y].previous = r[x, y];
+                    }
+                        
+                }
+                if (x - 1 >= 0)
+                {
+                    start = new SearchNode(x - 1, y, dist + 1);
+                    if (!(Closed_List.Contains(start)) && !(Open_List.Contains(start)))
+                    {
+                        Open_List.Add(start);
+                        r[x - 1, y].previous = r[x, y];
+                    }
+                }
+                if (y + 1 < MAP_SIZE)
+                {
+                    start = new SearchNode(x, y + 1, dist + 1);
+                    if (!(Closed_List.Contains(start)) && !(Open_List.Contains(start)))
+                    {
+                        Open_List.Add(start);
+                        r[x , y + 1].previous = r[x, y];
+                    }
+                }
+                if (y - 1 >= 0)
+                {
+                    start = new SearchNode(x, y - 1, dist + 1);
+                    if (!(Closed_List.Contains(start)) && !(Open_List.Contains(start)))
+                    {
+                        Open_List.Add(start);
+                        r[x , y - 1].previous = r[x, y];
+                    }
+                }
+            }
+            Closed_List.Add(Open_List[0]);
+            Open_List.Remove(Open_List[0]);
+        }
+        return r;
     }
 
     private Vector3 GetTileCenter(int x, int y)
