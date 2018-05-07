@@ -317,6 +317,8 @@
     <Compile Include="Assets\Scripts\Board_Highlights.cs" />
     <Compile Include="Assets\Scripts\BoardManager.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Event.cs" />
+    <Compile Include="Assets\Scripts\EventManager.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\GridMesh.cs" />
     <Compile Include="Assets\Scripts\MoveNode.cs" />

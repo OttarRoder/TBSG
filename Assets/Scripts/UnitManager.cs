@@ -116,6 +116,23 @@ public class UnitManager : MonoBehaviour
 
     private void MoveUnit(int x, int y)
     {
+        if(allowedMoves[x, y].code == 0)
+        {
+            return;
+        }
+
+        bool willAttack = false;
+        int enemyX = 0;
+        int enemyY = 0;
+        if (allowedMoves[x, y].code == 2)
+        {
+            enemyX = x;
+            enemyY = y;
+            int tempx = x;
+            x = allowedMoves[x, y].previous.x;
+            y = allowedMoves[tempx, y].previous.y;
+            willAttack = true;
+        }
         MoveNode node = allowedMoves[x, y];
         Stack<MoveNode> stack = new Stack<MoveNode>();
         while(node.code != 5)
@@ -123,7 +140,6 @@ public class UnitManager : MonoBehaviour
             stack.Push(node);
             node = node.previous;
         }
-
         if (allowedMoves[x, y].code == 1)
         {
             units[selectedUnit.currentX, selectedUnit.currentY] = null;
@@ -131,6 +147,11 @@ public class UnitManager : MonoBehaviour
             selectedUnit.SetPosition(x, y);
             units[x, y] = selectedUnit;
             units[x, y].moveRem -= allowedMoves[x, y].dist;
+        }
+        if (willAttack)
+        {
+            Combat(units[x, y], units[enemyX, enemyY]);
+            units[x, y].moveRem = 0;
         }
         DeselectUnit();
     }
@@ -220,6 +241,8 @@ public class UnitManager : MonoBehaviour
             }
             r[x, y].code = code;
             r[x, y].dist = dist;
+            r[x, y].x = x;
+            r[x, y].y = y;
 
             if ((code == 1 || code == 5) && dist < selectedUnit.moveRem)
             {
