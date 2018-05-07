@@ -322,6 +322,7 @@
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\GridMesh.cs" />
     <Compile Include="Assets\Scripts\MoveNode.cs" />
+    <Compile Include="Assets\Scripts\MoveUnit.cs" />
     <Compile Include="Assets\Scripts\SearchNode.cs" />
     <Compile Include="Assets\Scripts\Tiles\Tile.cs" />
     <Compile Include="Assets\Scripts\Unit.cs" />

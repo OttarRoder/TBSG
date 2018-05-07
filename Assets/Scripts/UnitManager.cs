@@ -13,7 +13,7 @@ public class UnitManager : MonoBehaviour
     private int selectedY = -1;
     private const float hitRange = 50f;
 
-    public static UnitManager instance { set; get; }
+    public static UnitManager Instance { set; get; }
     public GameObject Plane;
     public List<GameObject> unitPrefabs;
     private List<GameObject> activeUnits;
@@ -27,7 +27,7 @@ public class UnitManager : MonoBehaviour
 
     private void Start()
     {
-        instance = this;
+        Instance = this;
         SpawnAllUnits();
         Vector3 h = new Vector3();
         h.x = (MAP_SIZE / 2);
@@ -143,7 +143,13 @@ public class UnitManager : MonoBehaviour
         if (allowedMoves[x, y].code == 1)
         {
             units[selectedUnit.currentX, selectedUnit.currentY] = null;
-            selectedUnit.transform.position = GetTileCenter(x, y);
+            //Temp code
+            MoveUnit temp = selectedUnit.gameObject.GetComponent<MoveUnit>();
+            temp.target = selectedUnit;
+            temp.startPosition = selectedUnit.transform.position;
+            temp.endPosition = GetTileCenter(x, y);
+            EventManager.Instance.pushEvent(temp);
+            //Temp code
             selectedUnit.SetPosition(x, y);
             units[x, y] = selectedUnit;
             units[x, y].moveRem -= allowedMoves[x, y].dist;

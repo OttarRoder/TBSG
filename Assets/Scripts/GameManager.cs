@@ -12,8 +12,10 @@ public class GameManager : MonoBehaviour {
 
     public GameObject UM;
     public GameObject BM;
+    public GameObject EM;
     private UnitManager activeUM;
     private BoardManager activeBM;
+    private EventManager activeEM;
 
     public int playerTurn = 0;
 
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour {
         Instance = this;
         CreateUM();
         CreateBM();
+        CreateEM();
 	}
 	
 	void Update () {
@@ -32,8 +35,7 @@ public class GameManager : MonoBehaviour {
 
     private void CreateUM()
     {
-        Vector3 center = Vector3.zero;
-        GameObject go = Instantiate(UM, center, Quaternion.identity) as GameObject;
+        GameObject go = Instantiate(UM, Vector3.zero, Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
         activeUM = go.GetComponent<UnitManager>();
         activeUM.MAP_SIZE = MAP_SIZE;
@@ -43,13 +45,19 @@ public class GameManager : MonoBehaviour {
 
     private void CreateBM()
     {
-        Vector3 center = Vector3.zero;
-        GameObject go = Instantiate(BM, center, Quaternion.identity) as GameObject;
+        GameObject go = Instantiate(BM, Vector3.zero, Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
         activeBM = go.GetComponent<BoardManager>();
         activeBM.MAP_SIZE = MAP_SIZE;
         activeBM.TILE_SIZE = TILE_SIZE;
         activeBM.TILE_OFFSET = TILE_OFFSET;
+    }
+
+    private void CreateEM()
+    {
+        GameObject go = Instantiate(EM, Vector3.zero, Quaternion.identity) as GameObject;
+        go.transform.SetParent(transform);
+        activeEM = go.GetComponent<EventManager>();
     }
 
     private void EndTurn()

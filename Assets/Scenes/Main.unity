@@ -543,6 +543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UM: {fileID: 1125041464042746, guid: e82a9b760e24de240aa49194da31302e, type: 2}
   BM: {fileID: 1969076080205654, guid: c3f0c1ce0da377142b1fd4b104a0586f, type: 2}
+  EM: {fileID: 1468338164620660, guid: 7f07e0b83507c104da25e2a5e932134b, type: 2}
   playerTurn: 0
 --- !u!4 &1675876614
 Transform:

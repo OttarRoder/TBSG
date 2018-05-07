@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventManager : MonoBehaviour {
+public class EventManager : MonoBehaviour
+{
+    public static EventManager Instance { set; get; }
     /*
      * The purpose of this class is to sequentialy handle in game events,
      * events in the trigger stack are handled first followed by events in
@@ -16,6 +18,7 @@ public class EventManager : MonoBehaviour {
     private Event currentEvent;
     void Start ()
     {
+        Instance = this;
         empty = true;
         notActive = true;
         eventQueue = new Queue<Event>();
@@ -80,9 +83,6 @@ public class EventManager : MonoBehaviour {
         {
             currentEvent = eventQueue.Dequeue();
         }
-        if(currentEvent != null)
-        {
-            notActive = !currentEvent.initiate();
-        }
+        currentEvent.initiate();
     }
 }
