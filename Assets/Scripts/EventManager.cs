@@ -11,7 +11,7 @@ public class EventManager : MonoBehaviour
      * the event queue.
     */
     public bool empty { set; get; }
-    private bool notActive { set; get; }
+    public bool notActive { set; get; }
 
     private Queue<Event> eventQueue;
     private Stack<Event> triggerStack;
@@ -31,6 +31,14 @@ public class EventManager : MonoBehaviour
         if(!empty && notActive)
         {
             initiateNext();
+        }
+        if(currentEvent != null)
+        {
+            notActive = currentEvent.Run();
+            if(notActive)
+            {
+                currentEvent = null;
+            }
         }
 	}
 
@@ -83,6 +91,7 @@ public class EventManager : MonoBehaviour
         {
             currentEvent = eventQueue.Dequeue();
         }
-        currentEvent.initiate();
+        notActive = false;
+        currentEvent.Initiate();
     }
 }

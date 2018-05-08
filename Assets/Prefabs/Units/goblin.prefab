@@ -188,7 +188,6 @@ GameObject:
   - component: {fileID: 95671318401994236}
   - component: {fileID: 114739775368661924}
   - component: {fileID: 23303746909108512}
-  - component: {fileID: 114928921844330438}
   m_Layer: 0
   m_Name: goblin
   m_TagString: Untagged
@@ -1455,18 +1454,6 @@ MonoBehaviour:
   Attack: 5
   Defense: 0.5
   Health: 10
---- !u!114 &114928921844330438
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1268601322836710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c941f1132a0baa044ad0fe0b24d8156b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
 --- !u!137 &137043986803881768
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

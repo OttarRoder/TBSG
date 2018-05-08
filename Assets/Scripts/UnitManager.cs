@@ -134,22 +134,26 @@ public class UnitManager : MonoBehaviour
             willAttack = true;
         }
         MoveNode node = allowedMoves[x, y];
-        Stack<MoveNode> stack = new Stack<MoveNode>();
+        MoveNode preNode = allowedMoves[x, y].previous;
+        List<MoveUnit> moveSet = new List<MoveUnit>();
+        MoveUnit move;
+
         while(node.code != 5)
         {
-            stack.Push(node);
-            node = node.previous;
+            move = new MoveUnit();
+            move.target = selectedUnit.gameObject;
+            move.startPosition = GetTileCenter(preNode.x, preNode.y);
+            move.endPosition = GetTileCenter(node.x, node.y);
+            moveSet.Add(move);
+            node = preNode;
+            preNode = node.previous;
         }
         if (allowedMoves[x, y].code == 1)
         {
+            moveSet.Reverse();
+            EventManager.Instance.pushEvents(moveSet.ToArray());
+
             units[selectedUnit.currentX, selectedUnit.currentY] = null;
-            //Temp code
-            MoveUnit temp = selectedUnit.gameObject.GetComponent<MoveUnit>();
-            temp.target = selectedUnit;
-            temp.startPosition = selectedUnit.transform.position;
-            temp.endPosition = GetTileCenter(x, y);
-            EventManager.Instance.pushEvent(temp);
-            //Temp code
             selectedUnit.SetPosition(x, y);
             units[x, y] = selectedUnit;
             units[x, y].moveRem -= allowedMoves[x, y].dist;

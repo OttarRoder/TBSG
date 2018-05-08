@@ -317,19 +317,19 @@
     <Compile Include="Assets\Scripts\Board_Highlights.cs" />
     <Compile Include="Assets\Scripts\BoardManager.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
-    <Compile Include="Assets\Scripts\Event.cs" />
     <Compile Include="Assets\Scripts\EventManager.cs" />
+    <Compile Include="Assets\Scripts\Events\Event.cs" />
+    <Compile Include="Assets\Scripts\Events\MoveUnit.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\GridMesh.cs" />
     <Compile Include="Assets\Scripts\MoveNode.cs" />
-    <Compile Include="Assets\Scripts\MoveUnit.cs" />
     <Compile Include="Assets\Scripts\SearchNode.cs" />
     <Compile Include="Assets\Scripts\Tiles\Tile.cs" />
-    <Compile Include="Assets\Scripts\Unit.cs" />
     <Compile Include="Assets\Scripts\UnitManager.cs" />
     <Compile Include="Assets\Scripts\Units\goblin.cs" />
     <Compile Include="Assets\Scripts\Units\Hobgoblin.cs" />
     <Compile Include="Assets\Scripts\Units\troll.cs" />
+    <Compile Include="Assets\Scripts\Units\Unit.cs" />
     <Compile Include="Assets\Scripts\Units\wolf.cs" />
   </ItemGroup>
   <ItemGroup>
