@@ -41,6 +41,8 @@ public class UnitManager : MonoBehaviour
     {
         UpdateSelection();
         DrawSelection();
+        if(Time.time >= 2)
+            CheckUnitDeaths();
 
         if(Input.GetMouseButtonDown(0))
         {
@@ -160,15 +162,13 @@ public class UnitManager : MonoBehaviour
         }
         if (willAttack)
         {
-            Combat(units[x, y], units[enemyX, enemyY]);
+            Combat c = new Combat();
+            c.targetA = units[x, y];
+            c.targetB = units[enemyX, enemyY];
+            EventManager.Instance.pushEvent(c);
             units[x, y].moveRem = 0;
         }
         DeselectUnit();
-    }
-
-    private void Combat(Unit a, Unit b)
-    {
-
     }
 
     private void DrawSelection()
@@ -308,4 +308,22 @@ public class UnitManager : MonoBehaviour
         return origin;
     }
 
+    private void CheckUnitDeaths()
+    {
+        for(int i = 0; i < MAP_SIZE; i++)
+        {
+            for(int j = 0; j < MAP_SIZE; j++)
+            {
+                if(units[i, j] != null)
+                {
+                    if (units[i, j].healthRem <= 0)
+                    {
+                        units[i, j].healthRem = 0;
+                        units[i, j].gameObject.SetActive(false);
+                        units[i, j] = null;
+                    }
+                }
+            }
+        }
+    }
 }
