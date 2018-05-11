@@ -9,8 +9,8 @@ public class Combat : Event
 	
 	public override bool Run ()
     {
-        targetB.healthRem -= (targetA.Attack - targetB.Defense);
-        targetA.healthRem -= (targetB.Attack - targetA.Defense);    
+        targetB.healthRem -= (targetA.Attack - targetB.Defence);
+        targetA.healthRem -= (targetB.Attack - targetA.Defence);    
         return true;
 	}
 }

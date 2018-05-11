@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitManager : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class UnitManager : MonoBehaviour
     private int selectedX = -1;
     private int selectedY = -1;
     private const float hitRange = 50f;
+
+    public Text HealthText;
+    public Text MoveText;
+    public Text AttackText;
+    public Text DefenceText;
 
     public static UnitManager Instance { set; get; }
     public GameObject Plane;
@@ -35,6 +41,10 @@ public class UnitManager : MonoBehaviour
         this.Plane.transform.localPosition = h;
         this.Plane.transform.localScale = new Vector3(MAP_SIZE, 0, MAP_SIZE);
 
+        HealthText = GameObject.Find("HealthNumb").GetComponent<Text>();
+        MoveText = GameObject.Find("MoveNumb").GetComponent<Text>();
+        AttackText = GameObject.Find("AttackNumb").GetComponent<Text>();
+        DefenceText = GameObject.Find("DefenceNumb").GetComponent<Text>();
     }
 
     private void Update ()
@@ -108,12 +118,20 @@ public class UnitManager : MonoBehaviour
         selectedUnit = units[x, y];
         allowedMoves = PossibleMove();
         Board_Highlights.Instance.HighLightAllowedMoves(allowedMoves);
+        HealthText.text = (selectedUnit.healthRem).ToString() + "/" + (selectedUnit.Health).ToString();
+        MoveText.text = ((selectedUnit.moveRem).ToString() + "/" + (selectedUnit.Move).ToString());
+        AttackText.text = (selectedUnit.Attack).ToString();
+        DefenceText.text = (selectedUnit.Defence).ToString();
     }
 
     private void DeselectUnit()
     {
         Board_Highlights.Instance.HideHighlights();
         selectedUnit = null;
+        HealthText.text = "";
+        MoveText.text = "";
+        AttackText.text = "";
+        DefenceText.text = "";
     }
 
     private void MoveUnit(int x, int y)

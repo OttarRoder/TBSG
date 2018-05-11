@@ -14,7 +14,7 @@ public class GridMesh : MonoBehaviour
         var verticies = new List<Vector3>();
 
         var indicies = new List<int>();
-        for (int i = 0; i < GridSize; i++)
+        for (int i = 0; i <= GridSize; i++)
         {
             verticies.Add(new Vector3(i, 0, 0));
             verticies.Add(new Vector3(i, 0, GridSize));

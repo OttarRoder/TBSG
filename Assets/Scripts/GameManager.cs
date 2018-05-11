@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    //This will be the overall game manager, to set up each match and communicate between the Unitmanager, Board manager ect
+    /*
+     * This will be the overall game manager, to set up each match and
+     * communicate between the Unitmanager, Board manager ect
+     */
     public static GameManager Instance { set; get; }
 
     private const int MAP_SIZE = 20;
@@ -17,10 +20,11 @@ public class GameManager : MonoBehaviour {
     private BoardManager activeBM;
     private EventManager activeEM;
 
-    public int playerTurn = 0;
+    public int playerTurn { set; get; }
 
 	void Start () {
         Instance = this;
+        playerTurn = 0;
         CreateUM();
         CreateBM();
         CreateEM();

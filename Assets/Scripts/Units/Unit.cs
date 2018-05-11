@@ -16,7 +16,7 @@ public abstract class Unit : MonoBehaviour
 
     public int Move = 5;
     public int Attack = 5;
-    public int Defense = 2;
+    public int Defence = 2;
     public int Health = 10;
 
     private void Start()

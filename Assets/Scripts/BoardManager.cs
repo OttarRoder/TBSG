@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
-    //This class should handle all terrain behaviour and tile generation, the goal is to pass some kind of id for the map
-    //and for this class to fetch the approriate resource to generate the map tiles.
+    /*
+     * This class should handle all terrain behaviour and tile generation
+     * the goal is to pass some kind of id for the map
+     * and for this class to fetch the approriate resource to generate the map tiles.
+     */
     public static BoardManager Instance { set; get; }
+
     public List<GameObject> tilePrefabs;
 
     private Tile[,] TileMap { set; get; }
@@ -17,7 +21,6 @@ public class BoardManager : MonoBehaviour {
 
     private void Start()
     {
-        DrawMap();
         SpawnMap();
     }
 
@@ -46,7 +49,6 @@ public class BoardManager : MonoBehaviour {
     }
 
 
-
     //SUPPORT FUNCTIONS
     private Vector3 GetGridCenter(int x, int y)
     {
@@ -56,9 +58,4 @@ public class BoardManager : MonoBehaviour {
         origin.y -= 0.11f;
         return origin;
     }
-
-    //This function currently draws debug lines to display a grid on the playing surface,
-    //it will need conversion into an ingame render of lines, or some addition to tile textures ect.
-    private void DrawMap()
-    {}
 }

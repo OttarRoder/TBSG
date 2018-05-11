@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class EventManager : MonoBehaviour
 {
-    public static EventManager Instance { set; get; }
     /*
      * The purpose of this class is to sequentialy handle in game events,
      * events in the trigger stack are handled first followed by events in
      * the event queue.
     */
+    public static EventManager Instance { set; get; }
+
     public bool empty { set; get; }
     public bool notActive { set; get; }
 

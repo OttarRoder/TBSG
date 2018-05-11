@@ -9,18 +9,18 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1969076080205654}
+  m_RootGameObject: {fileID: 1274610346662250}
   m_IsPrefabParent: 1
---- !u!1 &1969076080205654
+--- !u!1 &1274610346662250
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4415321057226360}
-  - component: {fileID: 114594790661367094}
-  - component: {fileID: 114909709696796258}
+  - component: {fileID: 4653172570135070}
+  - component: {fileID: 114432393932309174}
+  - component: {fileID: 114632258569001064}
   m_Layer: 0
   m_Name: BoardConatiner
   m_TagString: Untagged
@@ -28,12 +28,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4415321057226360
+--- !u!4 &4653172570135070
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1969076080205654}
+  m_GameObject: {fileID: 1274610346662250}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -41,12 +41,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114594790661367094
+--- !u!114 &114432393932309174
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1969076080205654}
+  m_GameObject: {fileID: 1274610346662250}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee5ea62555c1f1445b3e79c38e96c2ca, type: 3}
@@ -57,12 +57,12 @@ MonoBehaviour:
   def_mat: {fileID: 2100000, guid: 48ab6221b24584c4a8bfea0fb8a18024, type: 2}
   sef_mat: {fileID: 2100000, guid: fba0196a74eff1148a8d99892aed7f2c, type: 2}
   ene_mat: {fileID: 2100000, guid: 645b9aba22de79e46a194577c65c6520, type: 2}
---- !u!114 &114909709696796258
+--- !u!114 &114632258569001064
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1969076080205654}
+  m_GameObject: {fileID: 1274610346662250}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee014f4fd38635f4c94ecfcbe6b0421e, type: 3}
