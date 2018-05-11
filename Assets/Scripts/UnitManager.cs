@@ -109,18 +109,23 @@ public class UnitManager : MonoBehaviour
 
     private void SelectUnit(int x, int y)
     {
+        DeselectUnit();
         if (units[x, y] == null)
+        {
             return;
-
+        }
         else if (units[x, y].Team != GameManager.Instance.playerTurn)
+        {
             return;
+        }
+
         DeselectUnit();
         selectedUnit = units[x, y];
         allowedMoves = PossibleMove();
         Board_Highlights.Instance.HighLightAllowedMoves(allowedMoves);
         HealthText.text = (selectedUnit.healthRem).ToString() + "/" + (selectedUnit.Health).ToString();
         MoveText.text = ((selectedUnit.moveRem).ToString() + "/" + (selectedUnit.Move).ToString());
-        AttackText.text = (selectedUnit.Attack).ToString();
+        AttackText.text = (selectedUnit.AttackLow).ToString() + "-" + (selectedUnit.AttackHigh).ToString();
         DefenceText.text = (selectedUnit.Defence).ToString();
     }
 
@@ -171,7 +176,7 @@ public class UnitManager : MonoBehaviour
         if (allowedMoves[x, y].code == 1)
         {
             moveSet.Reverse();
-            EventManager.Instance.pushEvents(moveSet.ToArray());
+            GameManager.Instance.activeEM.pushEvents(moveSet.ToArray());
 
             units[selectedUnit.currentX, selectedUnit.currentY] = null;
             selectedUnit.SetPosition(x, y);
@@ -181,12 +186,12 @@ public class UnitManager : MonoBehaviour
         if (willAttack)
         {
             Combat c = new Combat();
-            c.targetA = units[x, y];
-            c.targetB = units[enemyX, enemyY];
-            EventManager.Instance.pushEvent(c);
+            c.TargetA = units[x, y];
+            c.TargetB = units[enemyX, enemyY];
+            GameManager.Instance.activeEM.pushEvent(c);
             units[x, y].moveRem = 0;
         }
-        DeselectUnit();
+        SelectUnit(x, y);
     }
 
     private void DrawSelection()
@@ -318,7 +323,7 @@ public class UnitManager : MonoBehaviour
         return r;
     }
 
-    private Vector3 GetTileCenter(int x, int y)
+    public Vector3 GetTileCenter(int x, int y)
     {
         Vector3 origin = Vector3.zero;
         origin.x += (TILE_SIZE * x) + TILE_OFFSET;

@@ -7,7 +7,7 @@ public class MoveUnit : Event
     public Vector3 startPosition { set; get; }
     public Vector3 endPosition { set; get; }
     public GameObject target;
-    public float speed = 5.0f;
+    public float speed = 3.0f;
 
     private float startTime;
     private float journeyLength;
@@ -20,9 +20,11 @@ public class MoveUnit : Event
 
     public override bool Run()
     {
+        target.GetComponent<Animator>().SetBool("IsMoving", true);
         float distCovered = (Time.time - startTime) * speed;
         float fracJourney = distCovered / journeyLength;
         target.transform.position = Vector3.Lerp(startPosition, endPosition, fracJourney);
+
         if (target.transform.position == endPosition)
         {
             return true;

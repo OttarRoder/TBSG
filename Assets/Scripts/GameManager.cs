@@ -16,9 +16,9 @@ public class GameManager : MonoBehaviour {
     public GameObject UM;
     public GameObject BM;
     public GameObject EM;
-    private UnitManager activeUM;
-    private BoardManager activeBM;
-    private EventManager activeEM;
+    public UnitManager activeUM { set; get; }
+    public BoardManager activeBM { set; get; }
+    public EventManager activeEM { set; get; }
 
     public int playerTurn { set; get; }
 
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void Update () {
-		if(Input.GetKeyDown("e"))
+		if(Input.GetKeyDown("space"))
         {
             EndTurn();
         }

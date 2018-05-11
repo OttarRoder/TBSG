@@ -143,4 +143,4 @@ MonoBehaviour:
   DefenceText: {fileID: 0}
   Plane: {fileID: 1323123950463486}
   unitPrefabs:
-  - {fileID: 1268601322836710, guid: c5b862e512e51944c85d5e4157dfd89e, type: 2}
+  - {fileID: 1966304247494800, guid: 96ee58207c497494a815946a0a6bec6e, type: 2}
