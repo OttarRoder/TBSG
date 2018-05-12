@@ -16,6 +16,7 @@ public class MoveUnit : Event
     {
         startTime = Time.time;
         journeyLength = Vector3.Distance(startPosition, endPosition);
+        target.transform.LookAt(endPosition);
     }
 
     public override bool Run()

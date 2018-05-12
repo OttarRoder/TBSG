@@ -4,10 +4,6 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
-    //The unit class should eventualy hold just the template of a game unit, current work includes
-    //moving the possible move function to the unit manager
-    private const int MAP_SIZE = 20;
-
     public int currentX { set; get; }
     public int currentY { set; get; }
     public int Team { set; get; }

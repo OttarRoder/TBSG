@@ -312,6 +312,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ExitGame.cs" />
     <Compile Include="Assets\Scripts\Board_Highlights.cs" />
     <Compile Include="Assets\Scripts\BoardManager.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Assets\Scripts\Units\troll.cs" />
     <Compile Include="Assets\Scripts\Units\Unit.cs" />
     <Compile Include="Assets\Scripts\Units\wolf.cs" />
+    <Compile Include="Assets\StartGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="C:\Users\ottar\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Dark.uss" />

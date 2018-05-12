@@ -31,6 +31,10 @@ public class Combat : Event
 
     public override bool Run ()
     {
+        TargetA.transform.LookAt(TargetB.transform);
+        TargetB.transform.LookAt(TargetA.transform);
+        TargetA.gameObject.GetComponent<AudioSource>().Play();
+        TargetB.gameObject.GetComponent<AudioSource>().PlayDelayed(Random.Range(0, 0.3f));
         TargetB.healthRem -= (AttackA - TargetB.Defence);
         TargetA.healthRem -= (AttackB - TargetA.Defence);
         TargetA.gameObject.GetComponent<Animator>().SetTrigger("Attack");
