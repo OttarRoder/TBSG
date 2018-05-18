@@ -2,31 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
     /*
      * This will be the overall game manager, to set up each match and
      * communicate between the Unitmanager, Board manager ect
      */
     public static GameManager Instance { set; get; }
 
-    private const int MAP_SIZE = 20;
+    private const int MAP_SIZE = 30;
     private const float TILE_SIZE = 1f;
     private const float TILE_OFFSET = 0.5f;
+    private const float TILE_HEIGHT = 0.2f;
 
-    public GameObject UM;
-    public GameObject BM;
-    public GameObject EM;
-    public UnitManager activeUM { set; get; }
-    public BoardManager activeBM { set; get; }
-    public EventManager activeEM { set; get; }
+    public GameObject UnitManager;
+    public GameObject BoardManager;
+    public GameObject EventManager;
+    public GameObject AudioManager;
+    public GameObject PlayerManager;
+    public UnitManager activeUnitManager { set; get; }
+    public BoardManager activeBoardManager { set; get; }
+    public EventManager activeEventManager { set; get; }
+    public AudioManager activeAudioManager { set; get; }
+    public PlayerManager activePlayerManager { set; get; }
 
     public int playerTurn { set; get; }
 
-	void Start () {
+    void OnGUI()
+    {
+        GUI.Label(new Rect(0, 0, 100, 100),  ((int) (1.0f / Time.smoothDeltaTime)).ToString());
+    }
+
+    void Start () {
         Instance = this;
         playerTurn = 0;
-        CreateUM();
         CreateBM();
+        CreateUM();
         CreateEM();
 	}
 	
@@ -39,35 +50,36 @@ public class GameManager : MonoBehaviour {
 
     private void CreateUM()
     {
-        GameObject go = Instantiate(UM, Vector3.zero, Quaternion.identity) as GameObject;
+        GameObject go = Instantiate(UnitManager, Vector3.zero, Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
-        activeUM = go.GetComponent<UnitManager>();
-        activeUM.MAP_SIZE = MAP_SIZE;
-        activeUM.TILE_SIZE = TILE_SIZE;
-        activeUM.TILE_OFFSET = TILE_OFFSET;
+        activeUnitManager = go.GetComponent<UnitManager>();
+        activeUnitManager.MAP_SIZE = MAP_SIZE;
+        activeUnitManager.TILE_SIZE = TILE_SIZE;
+        activeUnitManager.TILE_OFFSET = TILE_OFFSET;
     }
 
     private void CreateBM()
     {
-        GameObject go = Instantiate(BM, Vector3.zero, Quaternion.identity) as GameObject;
+        GameObject go = Instantiate(BoardManager, Vector3.zero, Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
-        activeBM = go.GetComponent<BoardManager>();
-        activeBM.MAP_SIZE = MAP_SIZE;
-        activeBM.TILE_SIZE = TILE_SIZE;
-        activeBM.TILE_OFFSET = TILE_OFFSET;
+        activeBoardManager = go.GetComponent<BoardManager>();
+        activeBoardManager.MAP_SIZE = MAP_SIZE;
+        activeBoardManager.TILE_SIZE = TILE_SIZE;
+        activeBoardManager.TILE_OFFSET = TILE_OFFSET;
+        activeBoardManager.TILE_HEIGHT = TILE_HEIGHT;
     }
 
     private void CreateEM()
     {
-        GameObject go = Instantiate(EM, Vector3.zero, Quaternion.identity) as GameObject;
+        GameObject go = Instantiate(EventManager, Vector3.zero, Quaternion.identity) as GameObject;
         go.transform.SetParent(transform);
-        activeEM = go.GetComponent<EventManager>();
+        activeEventManager = go.GetComponent<EventManager>();
     }
 
     private void EndTurn()
     {
         playerTurn++;
         playerTurn = playerTurn % 2;
-        activeUM.ResetPlayer(playerTurn);
+        activeUnitManager.ResetPlayer(playerTurn);
     }
 }

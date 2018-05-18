@@ -144,3 +144,4 @@ MonoBehaviour:
   Plane: {fileID: 1323123950463486}
   unitPrefabs:
   - {fileID: 1966304247494800, guid: 96ee58207c497494a815946a0a6bec6e, type: 2}
+  - {fileID: 165424, guid: 9f4313a771e05c64d8da7ae6bd19a19f, type: 2}

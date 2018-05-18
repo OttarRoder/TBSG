@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
+    public int id { set; get; }
     public int currentX { set; get; }
     public int currentY { set; get; }
     public int Team { set; get; }
@@ -29,7 +30,7 @@ public abstract class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (UnitManager.Instance.GetTileCenter(currentX, currentY) == this.gameObject.transform.position)
+        if (GameManager.Instance.activeUnitManager.GetTileCenter(currentX, currentY) == this.gameObject.transform.position)
         {
             this.gameObject.GetComponent<Animator>().SetBool("IsMoving",false);
         }

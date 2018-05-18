@@ -312,26 +312,25 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\ExitGame.cs" />
-    <Compile Include="Assets\Scripts\Board_Highlights.cs" />
+    <Compile Include="Assets\Scripts\AudioManager.cs" />
     <Compile Include="Assets\Scripts\BoardManager.cs" />
-    <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\EventManager.cs" />
     <Compile Include="Assets\Scripts\Events\Combat.cs" />
     <Compile Include="Assets\Scripts\Events\Event.cs" />
     <Compile Include="Assets\Scripts\Events\MoveUnit.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\GridMesh.cs" />
-    <Compile Include="Assets\Scripts\MoveNode.cs" />
-    <Compile Include="Assets\Scripts\SearchNode.cs" />
+    <Compile Include="Assets\Scripts\Misc\Board_Highlights.cs" />
+    <Compile Include="Assets\Scripts\Misc\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Misc\ExitGame.cs" />
+    <Compile Include="Assets\Scripts\Misc\MoveNode.cs" />
+    <Compile Include="Assets\Scripts\Misc\SearchNode.cs" />
+    <Compile Include="Assets\Scripts\Misc\StartGame.cs" />
+    <Compile Include="Assets\Scripts\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Tiles\Tile.cs" />
     <Compile Include="Assets\Scripts\UnitManager.cs" />
-    <Compile Include="Assets\Scripts\Units\goblin.cs" />
-    <Compile Include="Assets\Scripts\Units\Hobgoblin.cs" />
-    <Compile Include="Assets\Scripts\Units\troll.cs" />
+    <Compile Include="Assets\Scripts\Units\Human.cs" />
+    <Compile Include="Assets\Scripts\Units\Undead.cs" />
     <Compile Include="Assets\Scripts\Units\Unit.cs" />
-    <Compile Include="Assets\Scripts\Units\wolf.cs" />
-    <Compile Include="Assets\StartGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="C:\Users\ottar\AppData\Local\Unity\cache\packages\packages.unity.com\com.unity.package-manager-ui@1.8.8\Editor\Resources\Styles\Main_Dark.uss" />

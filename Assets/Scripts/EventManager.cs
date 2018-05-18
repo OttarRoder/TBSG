@@ -9,7 +9,6 @@ public class EventManager : MonoBehaviour
      * events in the trigger stack are handled first followed by events in
      * the event queue.
     */
-    public static EventManager Instance { set; get; }
 
     public bool empty { set; get; }
     public bool notActive { set; get; }
@@ -19,7 +18,6 @@ public class EventManager : MonoBehaviour
     private Event currentEvent;
     void Start ()
     {
-        Instance = this;
         empty = true;
         notActive = true;
         eventQueue = new Queue<Event>();
