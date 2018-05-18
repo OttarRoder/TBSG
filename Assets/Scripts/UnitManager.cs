@@ -2,75 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UnitManager : MonoBehaviour
 {
+    /*
+     * The unit manager will handle all unit information and processes
+     */
     public int MAP_SIZE { set; get; }
     public float TILE_SIZE { set; get; }
     public float TILE_OFFSET { set; get; }
-
-    private int selectedX = -1;
-    private int selectedY = -1;
-    private const float hitRange = 50f;
-
-    public Text HealthText;
-    public Text MoveText;
-    public Text AttackText;
-    public Text DefenceText;
-
-    public GameObject Plane;
+    
+    //List of unit prefabs that can be spawned
     public List<GameObject> unitPrefabs;
+    //List of units that have been spawned in the battle so far
     private List<GameObject> activeUnits;
-    public int[,] units { set; get; }
-
-    private MoveNode[,] allowedMoves { set; get; }
-
-    private Unit selectedUnit;
-
-
+    //Grid representation of current unit locations, with each unit having a unique id and 0 being no unit
+    private int[,] units { set; get; }
 
     private void Start()
     {
         SpawnAllUnits();
-        Vector3 h = new Vector3();
-        h.x = (MAP_SIZE / 2);
-        h.z = (MAP_SIZE / 2);
-        this.Plane.transform.localPosition = h;
-        this.Plane.transform.localScale = new Vector3(MAP_SIZE, 0, MAP_SIZE);
-
-        HealthText = GameObject.Find("HealthNumb").GetComponent<Text>();
-        MoveText = GameObject.Find("MoveNumb").GetComponent<Text>();
-        AttackText = GameObject.Find("AttackNumb").GetComponent<Text>();
-        DefenceText = GameObject.Find("DefenceNumb").GetComponent<Text>();
     }
 
-    private void Update()
-    {
-        UpdateSelection();
-        DrawSelection();
-        if (Time.time >= 2)
-            CheckUnitDeaths();
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (selectedX >= 0 && selectedY >= 0)
-            {
-                SelectUnit(selectedX, selectedY);
-            }
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (selectedX >= 0 && selectedY >= 0 && selectedUnit != null)
-            {
-                MoveUnit(selectedX, selectedY);
-            }
-        }
-    }
-
+    //refreshes each unit belonging to player p
     public void ResetPlayer(int p)
     {
-        DeselectUnit();
         foreach (GameObject u in activeUnits)
         {
             if (u.GetComponent<Unit>().Team == p)
@@ -80,7 +36,8 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    private void SpawnAllUnits()
+    //Currently spawns some preset units on the battlefield, needs  work to spawn selected units
+    public void SpawnAllUnits()
     {
         activeUnits = new List<GameObject>();
         units = new int[MAP_SIZE, MAP_SIZE];
@@ -95,55 +52,25 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    private void SpawnUnit(int index, int x, int y, int t, float a)
+    //Spawns a unit of the given index at position x, y, with team t and rotation r
+    public void SpawnUnit(int index, int x, int y, int t, float r)
     {
         //Instansiate the unit to the correct transform then add it to the activeUnits list
-        GameObject go = Instantiate(unitPrefabs[index], GetTileCenter(x, y), Quaternion.Euler(0f, a, 0f)) as GameObject;
+        GameObject go = Instantiate(unitPrefabs[index], GetTileCenter(x, y), Quaternion.Euler(0f, r, 0f)) as GameObject;
         go.transform.SetParent(transform);
         activeUnits.Add(go);
         units[x, y] = activeUnits.Count();
 
         //Initialise Unit paramaters
-        getUnit(units[x, y]).id = activeUnits.Count();
-        getUnit(units[x, y]).Team = t;
-        getUnit(units[x, y]).SetPosition(x, y);
+        GetUnit(units[x, y]).id = activeUnits.Count();
+        GetUnit(units[x, y]).Team = t;
+        GetUnit(units[x, y]).SetPosition(x, y);
     }
 
-    private void SelectUnit(int x, int y)
+    //Moves a give unit to positon x, y using the MoveUnit event
+    public void MoveUnit(Unit selectedUnit, MoveNode[,] moveGrid, int x, int y)
     {
-        DeselectUnit();
-        if (getUnit(units[x, y]) == null)
-        {
-            return;
-        }
-        else if (getUnit(units[x, y]).Team != GameManager.Instance.playerTurn)
-        {
-            return;
-        }
-
-        DeselectUnit();
-        selectedUnit = getUnit(units[x, y]);
-        allowedMoves = PossibleMove();
-        Board_Highlights.Instance.HighLightAllowedMoves(allowedMoves);
-        HealthText.text = (selectedUnit.healthRem).ToString() + "/" + (selectedUnit.Health).ToString();
-        MoveText.text = ((selectedUnit.moveRem).ToString() + "/" + (selectedUnit.Move).ToString());
-        AttackText.text = (selectedUnit.AttackLow).ToString() + "-" + (selectedUnit.AttackHigh).ToString();
-        DefenceText.text = (selectedUnit.Defence).ToString();
-    }
-
-    private void DeselectUnit()
-    {
-        Board_Highlights.Instance.HideHighlights();
-        selectedUnit = null;
-        HealthText.text = "";
-        MoveText.text = "";
-        AttackText.text = "";
-        DefenceText.text = "";
-    }
-
-    private void MoveUnit(int x, int y)
-    {
-        if (allowedMoves[x, y].code == 0)
+        if (moveGrid[x, y].code == 0)
         {
             return;
         }
@@ -151,17 +78,17 @@ public class UnitManager : MonoBehaviour
         bool willAttack = false;
         int enemyX = 0;
         int enemyY = 0;
-        if (allowedMoves[x, y].code == 2)
+        if (moveGrid[x, y].code == 2)
         {
             enemyX = x;
             enemyY = y;
             int tempx = x;
-            x = allowedMoves[x, y].previous.x;
-            y = allowedMoves[tempx, y].previous.y;
+            x = moveGrid[x, y].previous.x;
+            y = moveGrid[tempx, y].previous.y;
             willAttack = true;
         }
-        MoveNode node = allowedMoves[x, y];
-        MoveNode preNode = allowedMoves[x, y].previous;
+        MoveNode node = moveGrid[x, y];
+        MoveNode preNode = moveGrid[x, y].previous;
         List<MoveUnit> moveSet = new List<MoveUnit>();
         MoveUnit move;
 
@@ -175,7 +102,7 @@ public class UnitManager : MonoBehaviour
             node = preNode;
             preNode = node.previous;
         }
-        if (allowedMoves[x, y].code == 1)
+        if (moveGrid[x, y].code == 1)
         {
             moveSet.Reverse();
             GameManager.Instance.activeEventManager.pushEvents(moveSet.ToArray());
@@ -183,53 +110,21 @@ public class UnitManager : MonoBehaviour
             units[selectedUnit.currentX, selectedUnit.currentY] = 0;
             selectedUnit.SetPosition(x, y);
             units[x, y] = selectedUnit.id;
-            getUnit(units[x, y]).moveRem -= allowedMoves[x, y].dist;
+            GetUnit(units[x, y]).moveRem -= moveGrid[x, y].dist;
         }
         if (willAttack)
         {
             Combat c = new Combat();
-            c.TargetA = getUnit(units[x, y]);
-            c.TargetB = getUnit(units[enemyX, enemyY]);
+            c.TargetA = GetUnit(units[x, y]);
+            c.TargetB = GetUnit(units[enemyX, enemyY]);
             GameManager.Instance.activeEventManager.pushEvent(c);
-            getUnit(units[x, y]).moveRem = 0;
-        }
-        SelectUnit(x, y);
-    }
-
-    private void DrawSelection()
-    {
-        if (selectedX >= 0 && selectedY >= 0)
-        {
-            Debug.DrawLine(
-                Vector3.forward * selectedY + Vector3.right * selectedX,
-                Vector3.forward * (selectedY + 1) + Vector3.right * (selectedX + 1));
-            Debug.DrawLine(
-                 Vector3.forward * (selectedY + 1) + Vector3.right * selectedX,
-                 Vector3.forward * selectedY + Vector3.right * (selectedX + 1));
+            GetUnit(units[x, y]).moveRem = 0;
         }
     }
 
-    private void UpdateSelection()
-    {
-        if (!Camera.main)
-        {
-            return;
-        }
-
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, hitRange, LayerMask.GetMask("BoardPlane")))
-        {
-            selectedX = (int)hit.point.x;
-            selectedY = (int)hit.point.z;
-        }
-        else
-        {
-            selectedX = -1;
-            selectedY = -1;
-        }
-    }
-
-    private MoveNode[,] PossibleMove()
+    // Returns a MoveNode array with the possible move locations for a given unit,
+    // The MoveNode contains the type of move available as well as the previous node
+    public MoveNode[,] PossibleMove(Unit selectedUnit)
     {
         Unit c;
         int code;
@@ -247,7 +142,7 @@ public class UnitManager : MonoBehaviour
             }
         }
 
-        SearchNode start = new SearchNode(selectedX, selectedY, 0);
+        SearchNode start = new SearchNode(selectedUnit.currentX, selectedUnit.currentY, 0);
         List<SearchNode> Open_List = new List<SearchNode>();
         List<SearchNode> Closed_List = new List<SearchNode>();
         Open_List.Add(start);
@@ -259,7 +154,7 @@ public class UnitManager : MonoBehaviour
             y = Open_List[0].y;
             dist = Open_List[0].dist;
 
-            c = getUnit(units[x, y]);
+            c = GetUnit(units[x, y]);
 
             code = 0;
             if (c == null)
@@ -270,7 +165,7 @@ public class UnitManager : MonoBehaviour
             {
                 code = 2;
             }
-            else if (selectedX == x && selectedY == y)
+            else if (selectedUnit.currentX == x && selectedUnit.currentY == y)
             {
                 code = 5;
             }
@@ -325,15 +220,18 @@ public class UnitManager : MonoBehaviour
         return r;
     }
 
+    //Returns a vector three of the center of a given coordinate, including its height
     public Vector3 GetTileCenter(int x, int y)
     {
         Vector3 origin = Vector3.zero;
         origin.x += (TILE_SIZE * x) + TILE_OFFSET;
         origin.z += (TILE_SIZE * y) + TILE_OFFSET;
-        origin.y += (GameManager.Instance.activeBoardManager.getHeight(x, y));
+        origin.y += (GameManager.Instance.activeBoardManager.GetHeight(x, y));
         return origin;
     }
 
+    // Checks every unit on the battlefield and deactivates it if health remaining is
+    // Less then zero
     private void CheckUnitDeaths()
     {
         for (int i = 0; i < MAP_SIZE; i++)
@@ -342,10 +240,10 @@ public class UnitManager : MonoBehaviour
             {
                 if (units[i, j] != 0)
                 {
-                    if (getUnit(units[i, j]).healthRem <= 0)
+                    if (GetUnit(units[i, j]).healthRem <= 0)
                     {
-                        getUnit(units[i, j]).healthRem = 0;
-                        getUnit(units[i, j]).gameObject.SetActive(false);
+                        GetUnit(units[i, j]).healthRem = 0;
+                        GetUnit(units[i, j]).gameObject.SetActive(false);
                         units[i, j] = 0;
                     }
                 }
@@ -353,13 +251,19 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    // Returns the unit at position n in the activeUnits list
-    private Unit getUnit(int n)
+    // Returns the unit with id n
+    private Unit GetUnit(int n)
     {
         if (n < 1)
         {
             return null;
         }
         return activeUnits[n - 1].GetComponent<Unit>();
+    }
+
+    //Returns the unit at position x, y
+    public Unit GetUnitAt(int x, int y)
+    {
+        return (GetUnit(units[x, y]));
     }
 }

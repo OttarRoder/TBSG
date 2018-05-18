@@ -18,15 +18,26 @@ public class Combat : Event
         AttackB = Random.Range(TargetB.AttackLow, TargetB.AttackHigh);
         CritA = Random.value <= TargetA.CritChance;
         CritB = Random.value <= TargetB.CritChance;
-        if(CritA)
+        float HeightA = GameManager.Instance.activeBoardManager.GetHeight(TargetA.currentX, TargetA.currentY);
+        float HeightB = GameManager.Instance.activeBoardManager.GetHeight(TargetB.currentX, TargetB.currentY);
+
+        if (CritA)
         {
-            AttackA *= (int)(TargetA.CritMult);
+            AttackA = (int)(TargetA.CritMult * AttackA);
         }
         if(CritB)
         {
-            AttackB *= (int)(TargetB.CritMult);
+            AttackB = (int)(TargetB.CritMult * AttackB);
         }
-        
+        if (HeightA > HeightB)
+        {
+            AttackA = (int)(AttackA * 1.2f);
+        }
+        else if (HeightB > HeightA)
+        {
+            AttackB = (int)(AttackB * 1.2f);
+        }
+
     }
 
     public override bool Run ()
@@ -36,7 +47,9 @@ public class Combat : Event
         TargetA.gameObject.GetComponent<AudioSource>().Play();
         TargetB.gameObject.GetComponent<AudioSource>().PlayDelayed(Random.Range(0, 0.3f));
         TargetB.healthRem -= (AttackA - TargetB.Defence);
+        Debug.Log(AttackA - TargetB.Defence);
         TargetA.healthRem -= (AttackB - TargetA.Defence);
+        Debug.Log(AttackB - TargetA.Defence);
         TargetA.gameObject.GetComponent<Animator>().SetTrigger("Attack");
         TargetB.gameObject.GetComponent<Animator>().SetTrigger("Attack");
         return true;

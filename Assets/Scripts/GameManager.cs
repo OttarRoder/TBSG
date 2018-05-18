@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     public GameObject BoardManager;
     public GameObject EventManager;
     public GameObject AudioManager;
-    public GameObject PlayerManager;
     public UnitManager activeUnitManager { set; get; }
     public BoardManager activeBoardManager { set; get; }
     public EventManager activeEventManager { set; get; }
@@ -33,12 +32,13 @@ public class GameManager : MonoBehaviour
         GUI.Label(new Rect(0, 0, 100, 100),  ((int) (1.0f / Time.smoothDeltaTime)).ToString());
     }
 
-    void Start () {
+    void Start ()
+    {
         Instance = this;
         playerTurn = 0;
         CreateBM();
-        CreateUM();
         CreateEM();
+        CreateUM();
 	}
 	
 	void Update () {

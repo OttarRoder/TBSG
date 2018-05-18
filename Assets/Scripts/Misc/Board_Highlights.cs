@@ -51,7 +51,7 @@ public class Board_Highlights : MonoBehaviour
                 {
                     GameObject go = GetHighlightObject();
                     go.SetActive(true);
-                    go.transform.position = new Vector3(i + TILE_OFFSET, GameManager.Instance.activeBoardManager.getHeight(i, j), j + TILE_OFFSET);
+                    go.transform.position = new Vector3(i + TILE_OFFSET, GameManager.Instance.activeBoardManager.GetHeight(i, j), j + TILE_OFFSET);
 
                     rend = go.GetComponent<Renderer>();
                     if (moves[i, j].code == 1)

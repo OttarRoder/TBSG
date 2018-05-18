@@ -29,24 +29,36 @@ public class BoardManager : MonoBehaviour
 
     void SpawnGrid()
     {
+        int counter = 0;
+        float h = 0.6f;
         MeshFilter filter = gameObject.GetComponent<MeshFilter>();
-        var mesh = new Mesh();
-        var verticies = new List<Vector3>();
+        Mesh mesh = new Mesh();
+        List<Vector3> verticies = new List<Vector3>();
 
-        var indicies = new List<int>();
-        for (int i = 0; i <= MAP_SIZE; i++)
+        List<int> indicies = new List<int>();
+        for (int i = 0; i < MAP_SIZE; i++)
         {
-            verticies.Add(new Vector3(i, 0, 0));
-            verticies.Add(new Vector3(i, 0, MAP_SIZE));
+            for (int j = 0; j < MAP_SIZE; j++)
+            {
+                h = GetHeight(i, j);
+                for(int k = 0; k < 8; k++)
+                {
+                    indicies.Add(counter);
+                    counter++;
+                }
 
-            indicies.Add(4 * i + 0);
-            indicies.Add(4 * i + 1);
+                verticies.Add(new Vector3(i, h, j));
+                verticies.Add(new Vector3(i, h, j+1));
 
-            verticies.Add(new Vector3(0, 0, i));
-            verticies.Add(new Vector3(MAP_SIZE, 0, i));
+                verticies.Add(new Vector3(i, h, j));
+                verticies.Add(new Vector3(i+1, h, j));
 
-            indicies.Add(4 * i + 2);
-            indicies.Add(4 * i + 3);
+                verticies.Add(new Vector3(i, h, j+1));
+                verticies.Add(new Vector3(i+1, h, j+1));
+
+                verticies.Add(new Vector3(i+1, h, j));
+                verticies.Add(new Vector3(i+1, h, j+1));
+            }
         }
 
         mesh.vertices = verticies.ToArray();
@@ -55,7 +67,7 @@ public class BoardManager : MonoBehaviour
 
         MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
         meshRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        meshRenderer.material.color = Color.black;
+        meshRenderer.material.color = Color.grey;
     }
 
     //Spawn map will create a grid of tiles, the size determined by MAP_SIZE, in the future this function needs to
@@ -90,7 +102,7 @@ public class BoardManager : MonoBehaviour
         TileMap[x, y] = go.GetComponent<Tile>();
     }
 
-    //SUPPORT FUNCTIONS
+    //Returns the coordinate positon a tile should be at given x, y and height
     private Vector3 GetGridCenter(int x, int y, int z)
     {
         Vector3 origin = Vector3.zero;
@@ -101,7 +113,8 @@ public class BoardManager : MonoBehaviour
         return origin;
     }
 
-    public float getHeight(int x, int y)
+    //Returns the Height of the tile at x, y
+    public float GetHeight(int x, int y)
     {
         return (HeightMap[x, y] * TILE_HEIGHT);
     }
