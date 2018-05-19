@@ -10,67 +10,67 @@ public class EventManager : MonoBehaviour
      * the event queue.
     */
 
-    public bool empty { set; get; }
-    public bool notActive { set; get; }
+    public bool Empty { set; get; }
+    public bool NotActive { set; get; }
 
-    private Queue<Event> eventQueue;
-    private Stack<Event> triggerStack;
-    private Event currentEvent;
+    private Queue<Event> EventQueue;
+    private Stack<Event> TriggerStack;
+    private Event CurrentEvent;
     void Start ()
     {
-        empty = true;
-        notActive = true;
-        eventQueue = new Queue<Event>();
-        triggerStack = new Stack<Event>();
+        Empty = true;
+        NotActive = true;
+        EventQueue = new Queue<Event>();
+        TriggerStack = new Stack<Event>();
 	}
 	
 	void Update ()
     {
-        empty = isEmpty();
-        if(!empty && notActive)
+        Empty = isEmpty();
+        if(!Empty && NotActive)
         {
             initiateNext();
         }
-        if(currentEvent != null)
+        if(CurrentEvent != null)
         {
-            notActive = currentEvent.Run();
-            if(notActive)
+            NotActive = CurrentEvent.Run();
+            if(NotActive)
             {
-                currentEvent = null;
+                CurrentEvent = null;
             }
         }
 	}
 
     public void pushEvent(Event a)
     {
-        eventQueue.Enqueue(a);
+        EventQueue.Enqueue(a);
     }
 
     public void pushEvents(Event[] a)
     {
         for(int i = 0; i < a.Length; i++)
         {
-            eventQueue.Enqueue(a[i]);
+            EventQueue.Enqueue(a[i]);
         }
     }
 
     public void pushTrigger(Event a)
     {
-        triggerStack.Push(a);
+        TriggerStack.Push(a);
     }
 
     public void pushTriggers(Event[] a)
     {
         for(int i = 0; i < a.Length; i++)
         {
-            triggerStack.Push(a[i]);
+            TriggerStack.Push(a[i]);
         }
     }
 
 
     private bool isEmpty()
     {
-        if(eventQueue.Count == 0 && triggerStack.Count == 0)
+        if(EventQueue.Count == 0 && TriggerStack.Count == 0)
         {
             return true;
         }
@@ -82,15 +82,15 @@ public class EventManager : MonoBehaviour
 
     private void initiateNext()
     {
-        if(triggerStack.Count > 0)
+        if(TriggerStack.Count > 0)
         {
-            currentEvent = triggerStack.Pop();
+            CurrentEvent = TriggerStack.Pop();
         }
-        else if(eventQueue.Count > 0)
+        else if(EventQueue.Count > 0)
         {
-            currentEvent = eventQueue.Dequeue();
+            CurrentEvent = EventQueue.Dequeue();
         }
-        notActive = false;
-        currentEvent.Initiate();
+        NotActive = false;
+        CurrentEvent.Initiate();
     }
 }

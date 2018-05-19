@@ -22,6 +22,9 @@ public abstract class Unit : MonoBehaviour
     public float CritChance = 0.1f;
     public float CritMult = 1.5f;
 
+    public string moveAnimation = "IsMoving";
+    public string attackAnimation = "Attack";
+
     private void Start()
     {
         moveRem = Move;

@@ -316,8 +316,12 @@
     <Compile Include="Assets\Scripts\BoardManager.cs" />
     <Compile Include="Assets\Scripts\EventManager.cs" />
     <Compile Include="Assets\Scripts\Events\Combat.cs" />
+    <Compile Include="Assets\Scripts\Events\EndAnimation.cs" />
     <Compile Include="Assets\Scripts\Events\Event.cs" />
+    <Compile Include="Assets\Scripts\Events\MoveSet.cs" />
     <Compile Include="Assets\Scripts\Events\MoveUnit.cs" />
+    <Compile Include="Assets\Scripts\Events\RotateUnit.cs" />
+    <Compile Include="Assets\Scripts\Events\StartAnimation.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Misc\Board_Highlights.cs" />
     <Compile Include="Assets\Scripts\Misc\CameraController.cs" />

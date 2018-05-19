@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -62,8 +63,14 @@ public class PlayerManager : MonoBehaviour
         {
             int x = SavedSelectedX - SelectedX;
             int y = SavedSelectedY - SelectedY;
-            GameManager.Instance.activeUnitManager.MoveUnit(SelectedUnit, MoveGrid, SavedSelectedX, SavedSelectedY);
+            GameManager.Instance.activeUnitManager.MoveUnit(SelectedUnit, MoveGrid, SavedSelectedX, SavedSelectedY, new Vector3(x,0,y));
             SelectUnit(SavedSelectedX, SavedSelectedY);
+            ClickMove = false;
+        }
+
+        if (Input.GetKeyDown("escape"))
+        {
+            SceneManager.LoadScene(0);
         }
     }
 

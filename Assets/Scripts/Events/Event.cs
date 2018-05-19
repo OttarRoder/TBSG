@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Event
 {
+    public string Name;
     public virtual void Initiate(){}
     public virtual bool Run()
     {

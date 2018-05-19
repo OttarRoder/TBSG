@@ -4,31 +4,36 @@ using UnityEngine;
 
 public class MoveUnit : Event
 {
-    public Vector3 startPosition { set; get; }
-    public Vector3 endPosition { set; get; }
-    public GameObject target;
+    public Vector3 StartPosition { set; get; }
+    public Vector3 EndPosition { set; get; }
+    public GameObject Target;
     public float speed = 3.0f;
 
     private float startTime;
     private float journeyLength;
 
+    public MoveUnit(Vector3 start, Vector3 end, GameObject t)
+    {
+        Target = t;
+        StartPosition = start;
+        EndPosition = end;
+    }
+
     public override void Initiate()
     {
         startTime = Time.time;
-        journeyLength = Vector3.Distance(startPosition, endPosition);
-        Vector3 temp = endPosition;
-        temp.y = startPosition.y;
-        target.transform.LookAt(temp);
+        journeyLength = Vector3.Distance(StartPosition, EndPosition);
+        Vector3 temp = EndPosition;
+        temp.y = StartPosition.y;
     }
 
     public override bool Run()
     {
-        target.GetComponent<Animator>().SetBool("IsMoving", true);
         float distCovered = (Time.time - startTime) * speed;
         float fracJourney = distCovered / journeyLength;
-        target.transform.position = Vector3.Lerp(startPosition, endPosition, fracJourney);
+        Target.transform.position = Vector3.Lerp(StartPosition, EndPosition, fracJourney);
 
-        if (target.transform.position == endPosition)
+        if (Target.transform.position == EndPosition)
         {
             return true;
         }

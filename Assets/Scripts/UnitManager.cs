@@ -12,11 +12,11 @@ public class UnitManager : MonoBehaviour
     public float TILE_SIZE { set; get; }
     public float TILE_OFFSET { set; get; }
     
-    //List of unit prefabs that can be spawned
+    // List of unit prefabs that can be spawned
     public List<GameObject> unitPrefabs;
-    //List of units that have been spawned in the battle so far
+    // List of units that have been spawned in the battle so far
     private List<GameObject> activeUnits;
-    //Grid representation of current unit locations, with each unit having a unique id and 0 being no unit
+    // Grid representation of current unit locations, with each unit having a unique id and 0 being no unit
     private int[,] units { set; get; }
 
     private void Start()
@@ -24,7 +24,15 @@ public class UnitManager : MonoBehaviour
         SpawnAllUnits();
     }
 
-    //refreshes each unit belonging to player p
+    private void Update()
+    {
+        if (Time.time >= 2)
+        {
+            CheckUnitDeaths();
+        }
+    }
+
+    // refreshes each unit belonging to player p
     public void ResetPlayer(int p)
     {
         foreach (GameObject u in activeUnits)
@@ -36,23 +44,23 @@ public class UnitManager : MonoBehaviour
         }
     }
 
-    //Currently spawns some preset units on the battlefield, needs  work to spawn selected units
+    // Currently spawns some preset units on the battlefield, needs  work to spawn selected units
     public void SpawnAllUnits()
     {
         activeUnits = new List<GameObject>();
         units = new int[MAP_SIZE, MAP_SIZE];
 
-        for (int i = 5; i < MAP_SIZE - 5; i++)
+        for (int i = 5; i < MAP_SIZE - 5; i += 2)
         {
             SpawnUnit(0, i, 1, 0, 0);
         }
-        for (int i = 5; i < MAP_SIZE - 5; i++)
+        for (int i = 5; i < MAP_SIZE - 5; i += 2)
         {
             SpawnUnit(1, i, MAP_SIZE - 2, 1, 180);
         }
     }
 
-    //Spawns a unit of the given index at position x, y, with team t and rotation r
+    // Spawns a unit of the given index at position x, y, with team t and rotation r
     public void SpawnUnit(int index, int x, int y, int t, float r)
     {
         //Instansiate the unit to the correct transform then add it to the activeUnits list
@@ -67,14 +75,16 @@ public class UnitManager : MonoBehaviour
         GetUnit(units[x, y]).SetPosition(x, y);
     }
 
-    //Moves a give unit to positon x, y using the MoveUnit event
-    public void MoveUnit(Unit selectedUnit, MoveNode[,] moveGrid, int x, int y)
+    // Moves a give unit to positon x, y using the MoveUnit event
+    public void MoveUnit(Unit selectedUnit, MoveNode[,] moveGrid, int x, int y, Vector3 face)
     {
+        // If invalid move, do nothing
         if (moveGrid[x, y].code == 0)
         {
             return;
         }
 
+        // If attack move, take the last move off the location, and set attacking to true
         bool willAttack = false;
         int enemyX = 0;
         int enemyY = 0;
@@ -87,31 +97,35 @@ public class UnitManager : MonoBehaviour
             y = moveGrid[tempx, y].previous.y;
             willAttack = true;
         }
+
+        // Create a list of movecoordinates and a target, add them to a Moveset event and send
+        // to the eventmanager
         MoveNode node = moveGrid[x, y];
         MoveNode preNode = moveGrid[x, y].previous;
-        List<MoveUnit> moveSet = new List<MoveUnit>();
-        MoveUnit move;
-
+        List<Vector3> moves = new List<Vector3>();
+        Unit target = selectedUnit;
         while (node.code != 5)
         {
-            move = new MoveUnit();
-            move.target = selectedUnit.gameObject;
-            move.startPosition = GetTileCenter(preNode.x, preNode.y);
-            move.endPosition = GetTileCenter(node.x, node.y);
-            moveSet.Add(move);
+            Vector3 startPosition = GetTileCenter(preNode.x, preNode.y);
+            Vector3 endPosition = GetTileCenter(node.x, node.y);
+            moves.Add(endPosition);
+            moves.Add(startPosition);
             node = preNode;
             preNode = node.previous;
         }
+        MoveSet moveSet = new MoveSet(target, moves, face);
+
+        //Send move event and change unit location in memory
         if (moveGrid[x, y].code == 1)
         {
-            moveSet.Reverse();
-            GameManager.Instance.activeEventManager.pushEvents(moveSet.ToArray());
-
+            GameManager.Instance.activeEventManager.pushEvent(moveSet);
             units[selectedUnit.currentX, selectedUnit.currentY] = 0;
             selectedUnit.SetPosition(x, y);
             units[x, y] = selectedUnit.id;
             GetUnit(units[x, y]).moveRem -= moveGrid[x, y].dist;
         }
+
+        //If attack move, send Attack event
         if (willAttack)
         {
             Combat c = new Combat();
