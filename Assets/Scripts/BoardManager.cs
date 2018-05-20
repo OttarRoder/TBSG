@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -76,12 +77,14 @@ public class BoardManager : MonoBehaviour
     {
         TileMap = new Tile[MAP_SIZE, MAP_SIZE];
         HeightMap = new int[MAP_SIZE, MAP_SIZE];
+        float seed = (DateTime.UtcNow.Millisecond);
+        Debug.Log(seed);
 
         for (int i = 0; i < MAP_SIZE; i++)
         {
             for (int j = 0; j < MAP_SIZE; j++)
             {
-                HeightMap[i, j] = (int)(10 * Mathf.PerlinNoise(i * 0.1f, j * 0.1f));
+                HeightMap[i, j] = (int)(10 * Mathf.PerlinNoise((i + seed)* 0.1f, (j + seed)* 0.1f));
             }
         }
 
