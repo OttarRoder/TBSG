@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         GUI.Label(new Rect(0, 0, 100, 100),  ((int) (1.0f / Time.smoothDeltaTime)).ToString());
     }
 
-    void Start ()
+    void Awake ()
     {
         Instance = this;
         playerTurn = 0;
